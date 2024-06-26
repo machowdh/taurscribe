@@ -1,7 +1,6 @@
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
-from audio import audiostreamer
-
+from audio import AudioStreamer
 
 app = FastAPI()
 
@@ -10,5 +9,13 @@ app = FastAPI()
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     while True:
-        # data = await websocket.receive_bytes()
+        audio_streamer = AudioStreamer()
+        try:
+            async for audio_chunk in audio_streamer.stream_audio():
+                translation = translate_audio(translate_audio)
+                await websocket.send_text(translation)
+        except WebSocketDisconnect:
+            pass
+        finally:
+            audio_streamer.stop()
         
