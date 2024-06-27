@@ -5,7 +5,7 @@ from audio import AudioStreamer
 app = FastAPI()
 
 
-@app.websocket("/ws/translate")
+@app.websocket("/wss/translate")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     while True:
@@ -16,6 +16,4 @@ async def websocket_endpoint(websocket: WebSocket):
                 await websocket.send_text(translation)
         except WebSocketDisconnect:
             pass
-        finally:
-            audio_streamer.stop()
         
