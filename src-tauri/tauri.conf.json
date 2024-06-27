@@ -12,6 +12,18 @@
   },
   "tauri": {
     "allowlist": {
+      "shell": {
+        "all": true,
+        "execute":true,
+        "open":true,
+        "sidecar": true,
+        "scope": [
+          {
+            "name":"main",
+            "sidecar":true
+          }
+        ]
+      },
       "all": false
     },
     "bundle": {
@@ -21,7 +33,9 @@
       "deb": {
         "depends": []
       },
-      "externalBin": [],
+      "externalBin": [
+        "main"
+      ],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
