@@ -40,7 +40,7 @@ class AudioPipeline:
                 exit()
         
         self.rate = int(self.default_speakers['defaultSampleRate'])
-        self.frames_per_buffer = int(self.rate * 0.1)  # Convert to integer
+        self.frames_per_buffer = int(self.rate * 0.1)
     
     def callback(self, in_data, frame_count, time_info, status):
         audio_data = np.frombuffer(in_data, dtype=np.float32)
@@ -61,8 +61,7 @@ class AudioPipeline:
 
                     if len(self.buffer) >= self.rate * self.chunk_duration:
                         resampled_audio = self.resample(self.buffer, self.rate, self.WHISPER_SAMPLE_RATE)
-
-                        transcription = self.pipe({'array': resampled_audio, 'sampling_rate': self.WHISPER_SAMPLE_RATE})
+                        transcription = self.pipe({'array': resampled_audio, 'sampling_rate': self.WHISPER_SAMPLE_RATE}, generate_kwargs={"task": "translate", "language": "en"})
                         asyncio.run(self.send_transcription(websocket, transcription["text"]))
                         self.buffer = self.buffer[len(self.buffer) - int(self.rate * self.overlap_duration):]
                 else:
@@ -79,7 +78,7 @@ class AudioPipeline:
     def start_audio_stream(self):
         self.stream = self.p.open(format=self.format,
                                   channels=self.channels,
-                                  rate=self.rate,  # Ensure rate is an integer
+                                  rate=self.rate,
                                   input=True,
                                   frames_per_buffer=self.frames_per_buffer,
                                   stream_callback=self.callback,
@@ -92,3 +91,4 @@ class AudioPipeline:
             self.stream.stop_stream()
             self.stream.close()
         self._running = False
+        self.audio_queue.queue.clear()

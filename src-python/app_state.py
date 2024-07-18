@@ -10,16 +10,17 @@ class AppState:
         self.transcription_thread = None
         self.stop_event = Event()
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     state = AppState()
     app.state.state = state
     logging.info("Starting API server...")
-    yield
-    logging.info("Shutting down API server...")
-    state.stop_event.set()
-    if state.transcription_thread is not None:
-        state.transcription_thread.join()
-    state.audio_pipeline.stop_audio_stream() 
-    logging.info("Server has been shutdown gracefully.")
+    try:
+        yield
+    finally:
+        logging.info("Shutting down API server...")
+        state.stop_event.set()
+        if state.transcription_thread is not None:
+            state.transcription_thread.join()
+        state.audio_pipeline.stop_audio_stream()
+        logging.info("Server has been shutdown gracefully.")
