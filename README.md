@@ -1,4 +1,4 @@
-# Realtime Translation with a Desktop App
+# Taurscribe | Realtime Translation with a Desktop App
 
 ## Overview
 This is a Tauri application that leverages Next.js for the frontend and a Python sidecar using FastAPI for backend services. The application listens to the user's desktop audio using PyAudio and WASAPI. As such, the application currently **only works on Windows.** The captured audio is fed into a HuggingFace pipeline using Whisper-Tiny to automatically transcribe incoming audio to English. Audio transcriptions are sent through a WebSocket used to communicate between the FastAPI server and the frontend.
