@@ -5,7 +5,7 @@ This is a Tauri application that leverages Next.js for the frontend and a Python
 
 ## Features
 - **Real-time audio capture** using PyAudio and WASAPI
-- **Transcription and translation** FastAPI backend that uses a threaded
+- **Transcription and translation** FastAPI backend that connects to the frontend with a Websocket endpoint
 - **Frontend** built with Next.js and using shadcn/ui
 - **Desktop integration** with Tauri
 
