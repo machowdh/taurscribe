@@ -13,6 +13,7 @@ const Home = () => {
 
   useEffect(() => {
     const connectWebSocket = () => {
+      console.log("Attempting WebSocket connection...");
       socketRef.current = new WebSocket("ws://localhost:8008/ws");
 
       socketRef.current.onopen = () => {
@@ -21,12 +22,12 @@ const Home = () => {
       };
 
       socketRef.current.onmessage = (event) => {
-        console.log("Received from server: " + event.data);
         setMessages((prev) => [...prev, event.data]);
       };
 
       socketRef.current.onerror = (event) => {
         console.error("WebSocket error observed:", event);
+        setTimeout(connectWebSocket, 1000); // Retry connection after 1 second
       };
 
       socketRef.current.onclose = () => {

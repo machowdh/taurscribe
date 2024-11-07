@@ -10,7 +10,7 @@ import asyncio
 
 class AudioPipeline:
     def __init__(self, chunk_duration=10, overlap_duration=2):
-        self.pipe = pipeline("automatic-speech-recognition", model="openai/whisper-tiny")
+        self.pipe = None  # Delay initialization
         self.p = pyaudio.PyAudio()
         self.WHISPER_SAMPLE_RATE = 16000
 
@@ -41,7 +41,11 @@ class AudioPipeline:
         
         self.rate = int(self.default_speakers['defaultSampleRate'])
         self.frames_per_buffer = int(self.rate * 0.1)
-    
+
+    def initialize_pipe(self):
+        if self.pipe is None:  # Initialize only once
+            self.pipe = pipeline("automatic-speech-recognition", model="openai/whisper-tiny")
+
     def callback(self, in_data, frame_count, time_info, status):
         audio_data = np.frombuffer(in_data, dtype=np.float32)
         self.audio_queue.put(audio_data)
@@ -54,6 +58,7 @@ class AudioPipeline:
         return resampled_waveform.numpy()
 
     def transcribe_audio(self, websocket, stop_event):
+        self.initialize_pipe()  # Ensure pipe is initialized for transcription
         while not stop_event.is_set():
             if self._running:
                 if not self.audio_queue.empty():
@@ -76,6 +81,7 @@ class AudioPipeline:
             logging.error(f'Error sending transcription {e}')
 
     def start_audio_stream(self):
+        self.initialize_pipe()  # Lazy initialization
         self.stream = self.p.open(format=self.format,
                                   channels=self.channels,
                                   rate=self.rate,
