@@ -25,8 +25,6 @@ I wanted to design a one-stop shop application for all audio translation and tra
 
 ## Additional Features/Points of Improvement
 - The UI currently only provides a textarea and a few buttons to demonstrate the project use case
-- Modified startup behavior to inform the user that the pipeline is 'setting up', i.e, there is an initial lag in between the transcription starting
-and when transcriptions appear.
 - User-set parameters:
     - Context window, or how many seconds of audio should be saved in the buffer for consecutive transcriptions
     - Transcription to the language of choice
