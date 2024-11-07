@@ -13,9 +13,7 @@ I wanted to design a one-stop shop application for all audio translation and tra
 - **Frontend** built with Next.js and using shadcn/ui
 - **Desktop integration** with Tauri
 
-Image:
 ![image](https://github.com/user-attachments/assets/f9faaa66-b1fa-421f-a943-49f1d10d252b)
-Recording a few exchanges between two Japanese men
 
 ## Prerequisites
 - A discrete GPU, this project was built and tested on an RTX 2080
